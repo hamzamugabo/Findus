@@ -10,7 +10,6 @@ import {
     Alert,
     TouchableWithoutFeedback,
     Keyboard,
-    CheckBox,
     ScrollView,
     TouchableHighlight,
     Picker,
@@ -22,6 +21,7 @@ import firebase, * as firbase from "firebase";
 import Colors from '../pages/colors';
 
 
+import CheckBox from "@react-native-community/checkbox";
 
 export default class AddLegalAid extends Component {
   static navigationOptions = {
@@ -34,11 +34,6 @@ export default class AddLegalAid extends Component {
 
     this.state = {
       uid: 1 ,
-      firstname: "",
-      lastname: "",
-      dob: "",
-      work_address: "",
-      residential_address: "",
       email: "",
       displayName:'',
       user_uid:'',

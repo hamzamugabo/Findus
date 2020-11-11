@@ -10,7 +10,7 @@ import {
     Alert,
     TouchableWithoutFeedback,
     Keyboard,
-    CheckBox,
+    
     ScrollView,
     TouchableHighlight,
     Picker,
@@ -18,6 +18,7 @@ import {
   
 } from "react-native";
 import firebase, * as firbase from "firebase";
+import CheckBox from "@react-native-community/checkbox";
 
 import Colors from '../pages/colors';
 
@@ -53,11 +54,13 @@ export default class Register extends Component {
  
  
   handleSignUp = () => {
-
+    this.setState({ loading: true, disabled: true });
   firebase
          .auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(userCredentials => {
+            this.handleSignUp2();
+
             return userCredentials.user.updateProfile({
                 displayName: this.state.displayName,
                 phoneNumber: this.state.phoneNumber
@@ -91,7 +94,7 @@ handleSignUp2 = () => {
                 
           if(!this.state.errorMessage){
             if(newString2 != ''){
-              this.setState({loading: true, disabled: true}, () => {
+              this.setState({loading: true, disabled: true});
             firebase.database().ref('users/' + newString2 ).set(
               {
                
@@ -107,7 +110,7 @@ handleSignUp2 = () => {
               }
               ).then(() => {  
                 if(!this.state.errorMessage){
-                  this.setState({ loading: false, disabled: false });
+                //   this.setState({ loading: false, disabled: false });
                   alert('Registered Successfully')
                   return this.props.navigation.navigate("Login");
                   }
@@ -117,7 +120,7 @@ handleSignUp2 = () => {
               // this.state.errorMessage ? this.handleSignUp()  : this.handle()
                this.setState({ loading: false, disabled: false });
           });
-        });
+        // });
         }
       }
     }else{alert('agree to terms first')}
