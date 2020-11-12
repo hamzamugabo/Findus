@@ -62,13 +62,13 @@ export default class AddLegalAid extends Component {
     super();
 
     this.state = {
-      uid: 1 ,
+      Description: "" ,
       email: "",
-      displayName:'',
-      user_uid:'',
-      phoneNumber:'',
-      password: "",
-      confirm_password: "",
+      Name:'',
+      Logo:'',
+      District:'',
+      Address: "",
+      Tellphone: "",
       confirm_agreement: false,
       loading: false,
       disabled: false
@@ -76,64 +76,55 @@ export default class AddLegalAid extends Component {
   }
  
  
-  handleSignUp = () => {
-
-  firebase
-         .auth()
-        .createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then(userCredentials => {
-            return userCredentials.user.updateProfile({
-                displayName: this.state.displayName,
-                phoneNumber: this.state.phoneNumber
-            });
-
-        })
-        .catch((error) => {
-          console.log(error);
-          this.setState({ errorMessage: error.message }); 
-           this.setState({ loading: false, disabled: false });
-      });
   
-};
 
 
-handleSignUp2 = () => {
-  var removechar = this.state.email;
+addlegalaid = () => {
+  // var removechar = this.state.email;
 
-   var originalString =removechar; 
-   var newString1 = originalString.replace('@', '-');
+  //  var originalString =removechar; 
+  //  var newString1 = originalString.replace('@', '-');
    
-   var newString2 = newString1.replace('.', '-');
+  //  var newString2 = newString1.replace('.', '-');
   var RandomNumber = Math.floor(Math.random() * 100) + 1 ;
           this.setState({uid : RandomNumber  });
-                    if(this.state.displayName  != ''){
-                      if(this.state.email  != ''){
-                        if(this.state.phoneNumber  != ''){
-                          if(this.state.password  != ''){
-                            if(this.state.confirm_password  == this.state.password){
-                                if (this.state.confirm_agreement == true) {
+                    if(this.state.Name  != ''){
+                      if(this.state.District  != ''){
+                        if(this.state.Address  != ''){
+                          if(this.state.Tellphone  != ''){
+                            if(this.state.Email  !=''){
+                                if (this.state.Description != '') {
                 
-          if(!this.state.errorMessage){
-            if(newString2 != ''){
-              this.setState({loading: true, disabled: true}, () => {
-            firebase.database().ref('users/' + newString2 ).set(
+          // if(!this.state.errorMessage){
+          //   if(newString2 != ''){
+              this.setState({loading: true, disabled: true});
+            firebase.database().ref('LegalAid/').push(
               {
                
-                      displayName: this.state.displayName,
+                      Name: this.state.Name,
           
-                      email: this.state.email,
+                      Email: this.state.Email,
           
-                      password: this.state.password,
+                      Logo: this.state.Logo,
           
-                      phoneNumber: this.state.phoneNumber,
+                      Tellphone: this.state.Tellphone,
           
-                      user_uid: this.state.user_uid
+                      Address: this.state.Address,
+                      District: this.state.District,
+                      Description: this.state.Description,
               }
-              ).then(() => {  
-                if(!this.state.errorMessage){
-                  this.setState({ loading: false, disabled: false });
-                  alert('Registered Successfully')
-                  return this.props.navigation.navigate("Login");
+              ).then((success) => {  
+                if(success){
+                  alert('Legal Aid added successfully')
+                  this.setState({ loading: false, disabled: false,
+                    Description: "" ,
+                    Email: "",
+                    Name:'',
+                    Logo:'',
+                    District:'',
+                    Address: "",
+                    Tellphone: "",
+                  });
                   }
                 
                 
@@ -141,33 +132,16 @@ handleSignUp2 = () => {
               // this.state.errorMessage ? this.handleSignUp()  : this.handle()
                this.setState({ loading: false, disabled: false });
           });
-        });
-        }
-      }
-    }else{alert('agree to terms first')}
-    }else{alert('passwords not matching')}
-    }else{alert('Enter password')}
-    }else{alert('Enter phone number')}
-    }else{alert('Enter email')}
-    }else{alert('Enter username')}
+        // });
+      //   }
+      // }
+    }else{alert('Enter Description')}
+    }else{alert('Enter Email')}
+    }else{alert('Enter Tellphone')}
+    }else{alert('Enter Address')}
+    }else{alert('Enter District')}
+    }else{alert('Enter Legal Aid Name')}
           };
-
-          handle = () => {
-            this.handleSignUp();
-            this.handleSignUp2();
-          }
-
-
-          handleCombined = () => {
-            if(this.state.errorMessage ){
-              return this.handleSignUp();
-            }
-            else{
-              return this.handle();
-            }
-            // this.state.errorMessage ? this.handleSignUp()  : this.handle()
-           
-          }
 
           render() {
             return (
@@ -185,11 +159,11 @@ handleSignUp2 = () => {
                       <View style={styles.inputContainer}>
                         <TextInput
                           underlineColorAndroid="transparent"
-                          placeholder="username"
+                          placeholder="Name"
                           style={styles.inputs}
                           autoCapitalize="none"
-                          onChangeText={(displayName) => this.setState({displayName})}
-                          value={this.state.displayName}
+                          onChangeText={(Name) => this.setState({Name})}
+                          value={this.state.Name}
                         />
                       </View>
                      
@@ -202,7 +176,7 @@ handleSignUp2 = () => {
                           autoCapitalize="none"
                           keyboardType="email-address"
                           style={styles.inputs}
-                          onChangeText={(text) => this.setState({email: text})}
+                          onChangeText={(text) => this.setState({Email: text})}
                         />
                       </View>
                       <View style={styles.inputContainer}>
@@ -212,34 +186,43 @@ handleSignUp2 = () => {
                           autoCapitalize="none"
                           keyboardType="number-pad"
                           style={styles.inputs}
-                          onChangeText={(text) => this.setState({phoneNumber: text})}
+                          onChangeText={(text) => this.setState({Tellphone: text})}
                         />
                       </View>
         
                       <View style={styles.inputContainer}>
                         <TextInput
                           underlineColorAndroid="transparent"
-                          placeholder="password"
+                          placeholder="District"
                           style={styles.inputs}
-                          onChangeText={(password) => this.setState({password})}
-                          value={this.state.password}
-                          secureTextEntry={true}
+                          onChangeText={(District) => this.setState({District})}
+                          value={this.state.District}
                         />
                       </View>
                       <View style={styles.inputContainer}>
                         <TextInput
                           underlineColorAndroid="transparent"
-                          placeholder="Confirm password"
+                          placeholder="Address"
                           style={styles.inputs}
-                          onChangeText={(confirm_password) =>
-                            this.setState({confirm_password})
+                          onChangeText={(Address) =>
+                            this.setState({Address})
                           }
-                          value={this.state.confirm_password}
-                          secureTextEntry={true}
+                          value={this.state.Address}
+                        />
+                      </View>
+                      <View style={styles.inputContainer}>
+                        <TextInput
+                          underlineColorAndroid="transparent"
+                          placeholder="Description"
+                          style={styles.inputs}
+                          onChangeText={(Description) =>
+                            this.setState({Description})
+                          }
+                          value={this.state.Description}
                         />
                       </View>
         
-                      <View style={[styles.buttonsContainer, {marginBottom: 5}]}>
+                      {/* <View style={[styles.buttonsContainer, {marginBottom: 5}]}>
                         <CheckBox
                           value={this.state.confirm_agreement}
                           onValueChange={(confirm_agreement) =>
@@ -251,18 +234,19 @@ handleSignUp2 = () => {
                         <Text style={styles.label}>
                           Agree to terms & Conditions
                         </Text>
-                      </View>
+                      </View> */}
         
                       <TouchableHighlight
                         style={[styles.buttonContainer, styles.loginButton]}
-                        onPress={this.handleSignUp}>
+                        onPress={this.addlegalaid}>
                         <Text style={styles.loginText}>Register</Text>
                       </TouchableHighlight>
                     </ScrollView>
                   </View>
+                  <Text></Text>
         
-                  {this.state.loading ? <ActivityIndicator size="large" /> : null}
-        
+                  <Text>{this.state.loading ? "Loading..." : null}</Text>
+                  <Text></Text>
                   {/* <View style={styles.signupTextCont}> */}
                   <TouchableOpacity
                     onPress={() => this.props.navigation.navigate('Login')}>
