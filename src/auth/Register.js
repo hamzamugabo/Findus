@@ -59,7 +59,6 @@ export default class Register extends Component {
          .auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(userCredentials => {
-            this.handleSignUp2();
 
             return userCredentials.user.updateProfile({
                 displayName: this.state.displayName,
@@ -82,7 +81,7 @@ handleSignUp2 = () => {
    var originalString =removechar; 
    var newString1 = originalString.replace('@', '-');
    
-   var newString2 = newString1.replace('.', '-');
+   var newString2 = removechar.replace(/[^0-9a-z]/gi, '-');
   var RandomNumber = Math.floor(Math.random() * 100) + 1 ;
           this.setState({uid : RandomNumber  });
                     if(this.state.displayName  != ''){
@@ -234,13 +233,18 @@ handleSignUp2 = () => {
         
                       <TouchableHighlight
                         style={[styles.buttonContainer, styles.loginButton]}
-                        onPress={this.handleSignUp}>
+                        // onPress={() => {
+                        //   this.handleSignUp();
+                        //   this.handleSignUp2();
+                        // }}
+          
+                        onPress={this.handle}>
                         <Text style={styles.loginText}>Register</Text>
                       </TouchableHighlight>
                     </ScrollView>
                   </View>
         
-                  {this.state.loading ? <ActivityIndicator size="large" /> : null}
+                 <Text> {this.state.loading ? "Loading..." : null}</Text>
         
                   {/* <View style={styles.signupTextCont}> */}
                   <TouchableOpacity

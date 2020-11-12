@@ -24,9 +24,38 @@ import Colors from '../pages/colors';
 import CheckBox from "@react-native-community/checkbox";
 
 export default class AddLegalAid extends Component {
-  static navigationOptions = {
-    title: "Add Legal Aid"
+  static navigationOptions = ({navigation}) => {
+    return {
+      headerTitle: () => (
+        <View style={{flexDirection: 'row'}}>
+           <Text style={styles.home2}>Legal Aid</Text>
+        </View>
+      ),
+      headerRight: () => (
+        <View style={styles.Header}>
+          <View style={[styles.headerContainer, {marginHorizontal: 30}]}>
+           
+            <View>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Home')}>
+                
+                <Text style={styles.home}>Home</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity
+                 onPress={() => navigation.navigate('SignOut')}>
+                   
+                 <Text style={styles.home}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+            
+          </View>
+        </View>
+      ),
+    };
   };
+
   
 
   constructor() {
@@ -145,7 +174,7 @@ handleSignUp2 = () => {
               <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <View style={styles.container}>
                   <View style={styles.reg}>
-                    <Text style={{fontSize: 20, color: Colors.blue}}>Register</Text>
+                    <Text style={{fontSize: 20, color: Colors.blue}}>Add Legal Aid</Text>
                     {this.state.errorMessage && (
                       <Text style={{color: 'red'}}>{this.state.errorMessage}</Text>
                     )}
@@ -364,5 +393,30 @@ handleSignUp2 = () => {
             width: 250,
             borderRadius: 30,
           },
+          home: {
+            color: Colors.orange,
+            fontSize: 13,
+            // fontWeight:"bold"
+          },
+          home2: {
+            color: Colors.blue,
+            fontSize: 13,
+            // fontWeight:"bold"
+          },
+          headerContainer: {
+            flexDirection: 'row',
+            width: '100%',
+            justifyContent: 'space-around',
+            paddingHorizontal: 0,
+            alignItems: 'center',
+            marginLeft: 10,
+          },
+          Header: {
+            // justifyContent:"space-around",
+            flexDirection: 'row',
+            marginLeft: 250,
+          },
+        
+        
         });
         

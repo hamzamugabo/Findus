@@ -32,7 +32,7 @@ class Login extends Component {
 
   
     handleLogin = () => {
-      this.setState({loading: true, disabled: true}, () => {
+      this.setState({loading: true, disabled: true});
       const { email, password } = this.state;
       
       // this.setState({ loading: true });
@@ -40,43 +40,74 @@ class Login extends Component {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then((success) => {
+          this.setState({loading: true, disabled: true});
           // If server response message same as Data Matched
           if (success) {
+            this.setState({loading: true, disabled: true});
+            var newString2 = email.replace(/[^0-9a-z]/gi, '-');
+
+        firebase.database()
+          .ref('users/' + newString2 + '/admin')
+          .once('value', (snapshot) => {
+            if (snapshot.exists()) {
+              
+              const user_type = snapshot.val();
+              // alert(user_type);
+              if (user_type == 'admin') {
+                this.props.navigation.navigate('AddLegalAid');
+                
+                // alert('Posting Entity');
+              } else {
+                this.props.navigation.navigate('Home');
+                
+              }
+            } else {
+              // alert("no exis");
+              this.props.navigation.navigate('Home');
+              this.setState({loading: false, disabled: false});
+            }
+          });
             //Then open Profile activity and send user email to profile activity.
-            this.props.navigation.navigate('Home');
+            // this.props.navigation.navigate('Home');
             // Alert.alert('data matched');
           } else {
             Alert.alert(error);
           }
 
-          this.setState({loading: false, disabled: false});
+          this.setState({loading: false, disabled: false,email:'',password:''});
         })
         .catch((error) => {
           console.log(error);
           this.setState({ errorMessage: error.message }); 
           this.setState({loading: false, disabled: false});
       });
-    });
+    // });
     }
   
 
     render() {
         return (
           <View style={styles.container}>
+            <Text>
+            {this.state.loading ? "Loading..." : null}{"\n"}</Text>
+              
             <View style={styles.headerContainer}>
               {/* <Image
                 style={{width: 133, height: 133}}
                 source={require('../images/Loginlogo.png')}
               /> */}
               
-            </View>
-            {this.state.loading ? <ActivityIndicator size="large" /> : null}
-    
-            <View style={{marginTop: 0, alignItems: 'center'}}>
-              <Text style={{color: 'red'}}>
+               
+            <Text style={{color: 'red'}}>
                 {this.state.errorMessage ? this.state.errorMessage : null}
               </Text>
+            </View>
+          
+    
+            <View style={{marginTop: 0, alignItems: 'center'}}>
+              
               <View style={styles.inputContainer}>
+             
                 {/* <Image
                   style={styles.inputIcon}
                   source={{
