@@ -21,9 +21,10 @@ import {
   
 } from "react-native";
 import Colors from '../pages/colors';
-
+import Card from '../pages/Card';
+import call from 'react-native-phone-call';
 import { ListItem, SearchBar } from "react-native-elements";
-
+import email from 'react-native-email'
 import firebase, * as firbase from "firebase";
 export default class Home extends React.Component {
     static navigationOptions = ({navigation}) => {
@@ -110,7 +111,7 @@ export default class Home extends React.Component {
           });
     
           this.setState({ data: items });
-          console.log(this.state.data);
+          // console.log(this.state.data);
           this.arrayholder = items;
         });
       }
@@ -133,7 +134,7 @@ export default class Home extends React.Component {
         });
     
         const newData = this.arrayholder.filter((item) => {
-          const itemData = `${item.feed.toUpperCase()} ${item.date_flushed.toUpperCase()}${item.employee.toUpperCase()}`;
+          const itemData = `${item.Address.toUpperCase()} ${item.District.toUpperCase()}${item.Name.toUpperCase()}`;
           const textData = text.toUpperCase();
     
           return itemData.indexOf(textData) > -1;
@@ -157,40 +158,102 @@ export default class Home extends React.Component {
           />
         );
       };
+      footer= () => {
+        return(
+        <View style={styles.headerStyle}>
+          <ScrollView horizontal={true}>
+          {this.state.data.map((order, index) => (
+              
+              <View key={index} style={{borderBottomColor:Colors.orange,padding:10}}>
+                 <TouchableHighlight
+                style={[styles.buttonContainer, styles.loginButton]}
+                // onPress={this.handleLogin}
+                >
+                <Text style={styles.loginText}>{order.District}</Text>
+              </TouchableHighlight>
+                </View>
+                ))}
+                </ScrollView>
+        </View>);
+      }
+      getListViewItem = (item) => {  
+        // Alert.alert(item.Email);  
+        const to = [item.Email] // string or array of email addresses
+        email(to, {
+            // Optional additional arguments
+            // cc: ['bazzy@moo.com', 'doooo@daaa.com'], // string or array of email addresses
+            // bcc: 'mee@mee.com', // string or array of email addresses
+            subject: 'Add subject',
+            body: 'Some body right here'
+        }).catch(console.error)
+    } 
+    getListViewItem2 = (item) => {  
+      Alert.alert(item.Tellphone);  
+  }  
+  call = (item) => {
+    const args = {
+      number: item.Tellphone,
+      prompt: false,
+    };
+    call(args).catch(console.error);
+  };
+
       _renderItem = ({ item }) => {
         return (
-          <View style={styles.item}>
-             <View>
-              {/* <Text style={styles.details}>Name:</Text> */}
-              <Text style={styles.value}>Name: {item.Name}</Text>
+          <Card>
+          
+          <View style={[styles.buttonsContainer, {marginBottom: 20}]}>
+              <Text style={styles.details}>Name:</Text>
+              <Text style={styles.value}>{item.Name}</Text>
+              {/* <Text style={styles.value}></Text> */}
             </View>
-            <View>
-              {/* <Text style={styles.details}>Address:</Text> */}
-              <Text style={styles.value}>Address: {item.Address}</Text>
-            </View>
-    
-            <View>
-              {/* <Text style={styles.details}>District:</Text> */}
-              <Text style={styles.value}>District: {item.District}</Text>
+            <View style={[styles.buttonsContainer, {marginBottom: 20}]}>
+              <Text style={styles.details}>Address:</Text>
+              <Text style={styles.value}>{item.Address}</Text>
+              {/* <Text style={styles.value}></Text> */}
             </View>
     
-            <View>
-              {/* <Text style={styles.details}>Email:</Text> */}
-              <Text style={styles.value}>Email: {item.Email}</Text>
+            <View style={[styles.buttonsContainer, {marginBottom: 20}]}>
+              <Text style={styles.details}>District:</Text>
+              <Text style={styles.value}>{item.District}</Text>
+              {/* <Text style={styles.value}></Text> */}
             </View>
     
-            <View>
-              {/* <Text style={styles.details}>Tellphone:</Text> */}
-              <Text style={styles.value}>Tellphone: {item.Tellphone}</Text>
+            <View style={[styles.buttonsContainer, {marginBottom: 20}]}>
+              <Text style={styles.details}>Email:</Text>
+              <Text style={styles.value}>{item.Email}</Text>
+              <TouchableOpacity
+              onPress={this.getListViewItem.bind(this, item)}
+              >
+               <Image
+                style={{width: 30, height: 30}}
+                source={require('../images/email.png')}
+              />
+</TouchableOpacity>
             </View>
     
-            <View>
-              {/* <Text style={styles.details}>Description:</Text> */}
-              <Text style={styles.value}>Description: {item.Description}</Text>
+            <View style={[styles.buttonsContainer, {marginBottom: 20}]}>
+              <Text style={styles.details}>Tellphone:</Text>
+              <Text style={styles.value}>{item.Tellphone}</Text>
+              <TouchableOpacity
+              onPress={this.call.bind(this, item)}
+              >
+               <Image
+                style={{width: 30, height: 30}}
+                source={require('../images/phone.png')}
+              />
+              </TouchableOpacity>
+            </View>
+    
+            <View style={[styles.buttonsContainer, {marginBottom: 20}]}>
+              <Text style={styles.details}>Description:</Text>
+              <Text style={styles.value}>{item.Description}</Text>
+              {/* <Text style={styles.value}></Text> */}
             </View>
     
             
-          </View>
+          {/* </View> */}
+          </Card>
         );
       };
 
@@ -210,25 +273,26 @@ export default class Home extends React.Component {
             <View
               style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
             >
-              <ActivityIndicator />
+              <Text>Loading...</Text>
             </View>
           );
         }
         return (
           <View style={{ flex: 1 ,marginBottom:40}}>
-            {/* <FlatList
+            <FlatList
               data={this.state.data}
               renderItem={this._renderItem}
               keyExtractor={(item, index) => {
                 return index.toString();
               }}
               ItemSeparatorComponent={this.renderSeparator}
-              ListHeaderComponent={this.renderHeader}
-            /> */}
+              ListHeaderComponent={this.footer}
+              ListFooterComponent={this.footer}
+            />
             
             <View>
             <ScrollView>
-            <View  style={{borderBottomColor:Colors.orange,borderBottomWidth :1, marginTop:20}}>
+            {/* <View  style={{borderBottomColor:Colors.orange,borderBottomWidth :1, marginTop:20}}>
             <TouchableHighlight
                 onPress={this.onClick}
                 
@@ -259,7 +323,7 @@ export default class Home extends React.Component {
                 <View style={{alignItems:'center',margin:10}}>
             <Text>Kasese</Text>
             </View>
-                </View>
+                </View> */}
             {/* {this.state.data.map((order, index) => (
               
               <View key={index} style={{borderBottomColor:Colors.orange,borderBottomWidth :1,}}>
@@ -451,12 +515,35 @@ const styles = StyleSheet.create({
         fontSize: 15,
       },
       details: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: "bold",
       },
       textCont: {},
       value: {
-        fontSize: 18,
+        fontSize: 14,
+      },
+      buttonsContainer: {
+        flexDirection: 'row',
+        width: '90%',
+        justifyContent: 'space-between',
+        paddingHorizontal: 0,
+        // alignItems: 'center',
+        // marginLeft: 10,
+      },
+      buttonContainer: {
+        height: 45,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 10,
+        // width: 150,
+        borderRadius: 10,
+      },
+      loginButton: {
+        backgroundColor: '#0c2642',
+      },
+      loginText: {
+        color: '#58f406',
       },
     
   });
