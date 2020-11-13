@@ -12,6 +12,7 @@ import Home from "./src/screens/Home";
 import Loading from "./src/pages/Loading";
 import AddLegalAid from "./src/screens/AddLegalAid";
 import ForgotPassword from "./src/auth/ForgotPassword";
+import AdminHome from "./src/screens/AdminHome";
 
 const _setTimeout = global.setTimeout;
 const _clearTimeout = global.clearTimeout;
@@ -80,7 +81,8 @@ const RootStack = createStackNavigator(
     Loading:Loading,
     SignOut:SignOut,
     AddLegalAid:AddLegalAid,
-    ForgotPassword:ForgotPassword
+    ForgotPassword:ForgotPassword,
+    AdminHome:AdminHome
     
 
 

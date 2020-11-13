@@ -37,7 +37,7 @@ export default class AddLegalAid extends Component {
            
             <View>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Home')}>
+                onPress={() => navigation.navigate('AdminHome')}>
                 
                 <Text style={styles.home}>Home</Text>
               </TouchableOpacity>
@@ -76,7 +76,15 @@ export default class AddLegalAid extends Component {
   }
  
  
-  
+  componentDidMount() {
+    firebase.
+    auth().onAuthStateChanged((user) => {
+      if (!user) {
+       
+        this.props.navigation.navigate('Login');
+      } 
+    });
+  }
 
 
 addlegalaid = () => {
@@ -243,18 +251,17 @@ addlegalaid = () => {
                       </TouchableHighlight>
                     </ScrollView>
                   </View>
-                  <Text></Text>
+                  {/* <Text></Text> */}
         
                   <Text>{this.state.loading ? "Loading..." : null}</Text>
                   <Text></Text>
                   {/* <View style={styles.signupTextCont}> */}
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={() => this.props.navigation.navigate('Login')}>
-                    {/* <Text style={styles.signupButton}> */}
                     <Text style={styles.signupText}>
                       Already have an account? Login
                     </Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                   {/* </View> */}
                 </View>
               </TouchableWithoutFeedback>

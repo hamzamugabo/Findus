@@ -54,7 +54,7 @@ export default class Loading extends React.Component {
             if (snapshot.exists()) {
               const user_type = snapshot.val();
               if (user_type == 'admin') {
-                this.props.navigation.navigate('AddLegalAid');
+                this.props.navigation.navigate('AdminHome');
                 
                 // alert('Posting Entity');
               } else {

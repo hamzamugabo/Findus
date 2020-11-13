@@ -26,7 +26,7 @@ import call from 'react-native-phone-call';
 import { ListItem, SearchBar } from "react-native-elements";
 import email from 'react-native-email'
 import firebase, * as firbase from "firebase";
-export default class Home extends React.Component {
+export default class AdminHome extends React.Component {
     static navigationOptions = ({navigation}) => {
         return {
              headerTitle: () => (
@@ -76,10 +76,8 @@ export default class Home extends React.Component {
   }
 
       componentDidMount() {
+          
         this.setState({ loading: true });
-        this.setState({loading: true, disabled: true});
-        // var newString2 = email.replace(/[^0-9a-z]/gi, '-');
-
         firebase.
         auth().onAuthStateChanged((user) => {
           if (!user) {
@@ -87,7 +85,7 @@ export default class Home extends React.Component {
             this.props.navigation.navigate('Login');
           } 
         });
-
+       
 
         var ref = firebase
           .database()
@@ -128,6 +126,13 @@ export default class Home extends React.Component {
           />
         );
       };
+    //   componentWillUnmount() {
+    //     // fix Warning: Can't perform a React state update on an unmounted component
+    //     this.setState = (state,callback)=>{
+    //         return;
+    //     };
+    // }
+
     addLegalAid = () => {
       this.setState({ loading: true });
         const { currentUser } = firebase.auth();
@@ -164,12 +169,6 @@ export default class Home extends React.Component {
         }
       });
     };
-  //   componentWillUnmount() {
-  //     // fix Warning: Can't perform a React state update on an unmounted component
-  //     this.setState = (state,callback)=>{
-  //         return;
-  //     };
-  // }
       searchFilterFunction = (District) => {
         // text = this.state.data.District;
         this.setState({
@@ -456,7 +455,7 @@ export default class Home extends React.Component {
 
             </View>
             </View>
-            {/* {this.state.is_admin?(
+            {/* {this.state.is_admin?( */}
             <TouchableOpacity
           activeOpacity={0.7}
           onPress={this.addLegalAid}
@@ -472,7 +471,8 @@ export default class Home extends React.Component {
             source={require('../images/plus_icon.png')}
             style={styles.floatingButtonStyle}
           />
-        </TouchableOpacity>):null} */}
+        </TouchableOpacity>
+        {/* ):null} */}
           </View>
         );
       }
@@ -636,6 +636,7 @@ const styles = StyleSheet.create({
       loginButton: {
         backgroundColor: '#0c2642',
         padding:7
+
       },
       loginText: {
         color: '#58f406',

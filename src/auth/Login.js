@@ -54,7 +54,7 @@ class Login extends Component {
               const user_type = snapshot.val();
               // alert(user_type);
               if (user_type == 'admin') {
-                this.props.navigation.navigate('AddLegalAid');
+                this.props.navigation.navigate('AdminHome');
                 
                 // alert('Posting Entity');
               } else {
