@@ -456,11 +456,13 @@ export default class AdminHome extends React.Component {
             </View>
             </View>
             {/* {this.state.is_admin?( */}
+             
             <TouchableOpacity
           activeOpacity={0.7}
           onPress={this.addLegalAid}
           style={styles.touchableOpacityStyle}>
-          <Image
+            <Text style={{fontSize:50,color:'white'}}>+</Text>
+          {/* <Image
             // FAB using TouchableOpacity with an image
             // For online image
             // source={{
@@ -470,7 +472,7 @@ export default class AdminHome extends React.Component {
             // For local image
             source={require('../images/plus_icon.png')}
             style={styles.floatingButtonStyle}
-          />
+          /> */}
         </TouchableOpacity>
         {/* ):null} */}
           </View>
@@ -488,6 +490,15 @@ const styles = StyleSheet.create({
     },
     cardview: {
       marginTop: 90,
+    },
+    button: {
+      width: 100,
+      height: 100,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 10,
+      borderRadius: 100,
+      backgroundColor: '#000080',
     },
     buttonsContainer: {
       flexDirection: 'row',
@@ -634,12 +645,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
       },
       loginButton: {
-        backgroundColor: '#0c2642',
+        // backgroundColor: '#0c2642',
+        backgroundColor: '#000080',
         padding:7
 
       },
       loginText: {
-        color: '#58f406',
+        color: 'white',
+        // color: '#58f406',
       },
       touchableOpacityStyle: {
         position: 'absolute',
@@ -649,6 +662,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         right: 30,
         bottom: 30,
+        borderRadius:50,
+        backgroundColor:'#000080'
       },
       floatingButtonStyle: {
         resizeMode: 'contain',

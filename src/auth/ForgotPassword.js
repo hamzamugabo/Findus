@@ -182,10 +182,12 @@ const styles = StyleSheet.create({
   },
 
   loginButton: {
-    backgroundColor: '#0c2642',
+    // backgroundColor: '#0c2642',
+    backgroundColor: '#000080',
   },
   loginText: {
-    color: '#58f406',
+    color: 'white',
+    // color: '#58f406',
   },
   buttonContainer: {
     height: 45,

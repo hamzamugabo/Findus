@@ -92,20 +92,25 @@ class Login extends Component {
             {this.state.loading ? "Loading..." : null}{"\n"}</Text>
               
             <View style={styles.headerContainer}>
-              {/* <Image
+              <View >
+              <Image
                 style={{width: 133, height: 133}}
                 source={require('../images/Loginlogo.png')}
-              /> */}
-              
+              />
+              </View>
+             
                
-            <Text style={{color: 'red'}}>
-                {this.state.errorMessage ? this.state.errorMessage : null}
-              </Text>
+           
             </View>
           
-    
+            <View style={{justifyContent: 'center',
+        alignItems: 'center', marginBottom:5}}>
+              <Text style={{color: 'red'}}>
+                {this.state.errorMessage ? this.state.errorMessage : null}
+              </Text>
+              </View>
             <View style={{marginTop: 0, alignItems: 'center'}}>
-              
+            
               <View style={styles.inputContainer}>
              
                 {/* <Image
@@ -209,19 +214,30 @@ class Login extends Component {
         borderRadius: 30,
       },
       loginButton: {
-        backgroundColor: '#0c2642',
+        // backgroundColor: '#0c2642',
+        backgroundColor: '#000080',
       },
       loginText: {
-        color: '#58f406',
+        color: 'white',
+        // color: '#58f406',
       },
       headerContainer: {
         justifyContent: 'center',
         alignItems: 'center',
         padding: 15,
         // backgroundColor: "white",
-        marginBottom: 3,
+        // marginBottom: 3,
         flexDirection: 'row',
-        marginTop: 30,
+        // marginTop: 20,
+      },
+      headerContainer2: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 15,
+        // backgroundColor: "white",
+        // marginBottom: 3,
+        flexDirection: 'row',
+        // marginTop: 5,
       },
       // label: {
       //   flexDirection:'row',

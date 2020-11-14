@@ -74,10 +74,10 @@ export default class Loading extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <Image
-          // style={{width: 70, height: 70}}
+        <Image
+          style={{width: 70, height: 70}}
           source={require('../images/Loginlogo.png')}
-        /> */}
+        />
         <Text>Loading...</Text>
         <ActivityIndicator size="large" />
       </View>

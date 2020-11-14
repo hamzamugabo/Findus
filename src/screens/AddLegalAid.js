@@ -14,11 +14,14 @@ import {
     TouchableHighlight,
     Picker,
     Image,
+    PixelRatio
   
 } from "react-native";
-import firebase, * as firbase from "firebase";
+import firebase  from "firebase";
 
 import Colors from '../pages/colors';
+import * as Progress from 'react-native-progress';
+import ImagePicker from 'react-native-image-picker';
 
 
 import CheckBox from "@react-native-community/checkbox";
@@ -71,7 +74,15 @@ export default class AddLegalAid extends Component {
       Tellphone: "",
       confirm_agreement: false,
       loading: false,
-      disabled: false
+      disabled: false,
+      currentUser: null,
+      ImageSource: null,
+      stimage: null,
+      stuploading: false,
+      sttransferred: 0,
+      photos: '',
+
+
     };
   }
  
@@ -89,6 +100,8 @@ export default class AddLegalAid extends Component {
 
 addlegalaid = () => {
   // var removechar = this.state.email;
+
+  // this.uploadImage();
 
   //  var originalString =removechar; 
   //  var newString1 = originalString.replace('@', '-');
@@ -120,6 +133,7 @@ addlegalaid = () => {
                       Address: this.state.Address,
                       District: this.state.District,
                       Description: this.state.Description,
+                      passport_photo: this.state.stimage,
               }
               ).then((success) => {  
                 if(success){
@@ -150,6 +164,84 @@ addlegalaid = () => {
     }else{alert('Enter District')}
     }else{alert('Enter Legal Aid Name')}
           };
+          selectPhotoTapped() {
+            // selectImage = () => {
+            const options = {
+              quality: 1.0,
+              maxWidth: 500,
+              maxHeight: 500,
+              storageOptions: {
+                skipBackup: true,
+              },
+            };
+        
+            ImagePicker.showImagePicker(options, (response) => {
+              // console.log('Response = ', response);
+        
+              if (response.didCancel) {
+                console.log('User cancelled photo picker');
+              } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+              } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+              } else {
+                let source = {uri: response.uri};
+        
+                console.log(source);
+                this.setState({
+                  stimage: source,
+                  // data: response.data
+                });
+              }
+            });
+          }
+          uploadImage = async () => {
+            // this.saveData();
+            const {uri} = this.state.stimage;
+        
+            // console.log('uri= '+uri)
+        
+            console.log('stimage= ' + this.state.stimage);
+            const filename = uri;
+        
+            // alert(filename)
+            console.log(filename);
+            const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+            this.setState({sttransferred: 0});
+            this.setState({stuploading: true});
+            // sttransferred(0);
+            const task = firebase.storage()
+              .ref('/passport_photo' + filename)
+              .putFile(uri);
+            // set progress state
+            task.on('state_changed', (snapshot) => {
+              this.setState({
+                sttransferred:
+                  Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
+              });
+            });
+            try {
+              await task;
+            } catch (e) {
+              console.error(e);
+              alert(e);
+            }
+        
+            this.setState({stuploading: false});
+            Alert.alert('Photo uploaded!', 'Your photo has been uploaded');
+            const ref = firebase.storage().ref(filename);
+        
+            ref
+              .getDownloadURL()
+              .then((url) => {
+                this.setState({photos: url});
+              })
+              .catch((e) => console.log('getting downloadURL of image error => ', e));
+            // // alert(this.state.url)
+        
+            // alert(this.state.url)
+          };
+        
 
           render() {
             return (
@@ -243,12 +335,36 @@ addlegalaid = () => {
                           Agree to terms & Conditions
                         </Text>
                       </View> */}
-        
-                      <TouchableHighlight
+                      {/* <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)} 
+                      style={{alignItems:'center'}}
+                      >
+              <View style={styles.ImageContainer}>
+                {this.state.stimage === null ? (
+                  <Text style={{color:'#FFFFFF'}}>Select Logo</Text>
+                ) : (
+                  <Image
+                    style={styles.ImageContainer}
+                    source={this.state.stimage}
+                  />
+                )}
+              </View>
+            </TouchableOpacity> */}
+            <Text></Text>
+            {this.state.stuploading ? (
+              <View style={styles.progressBarContainer}>
+                <Progress.Bar progress={this.state.sttransferred} width={300} />
+              </View>
+            ) : (
+              
+              <TouchableHighlight
                         style={[styles.buttonContainer, styles.loginButton]}
                         onPress={this.addlegalaid}>
                         <Text style={styles.loginText}>Register</Text>
                       </TouchableHighlight>
+            )}
+
+        
+                     
                     </ScrollView>
                   </View>
                   {/* <Text></Text> */}
@@ -370,10 +486,12 @@ addlegalaid = () => {
             flex: 1,
           },
           loginButton: {
-            backgroundColor: '#0c2642',
+            // backgroundColor: '#0c2642',
+            backgroundColor: '#000080',
           },
           loginText: {
-            color: '#58f406',
+            color: 'white',
+            // color: '#58f406',
           },
           buttonContainer: {
             height: 45,
@@ -406,6 +524,17 @@ addlegalaid = () => {
             // justifyContent:"space-around",
             flexDirection: 'row',
             marginLeft: 250,
+          },
+          ImageContainer: {
+            borderRadius: 90,
+            width: 60,
+            height: 60,
+            borderColor: '#000080',
+            borderWidth: 1 / PixelRatio.get(),
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#000080',
+            padding:10
           },
         
         
